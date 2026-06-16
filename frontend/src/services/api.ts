@@ -895,6 +895,71 @@ async function verifyOrCreateParty(partyName: string, partyType: 'Customer' | 'S
   }
 }
 
+// Ensure stock item exists in ERPNext before posting entries referencing it
+async function verifyOrCreateItem(itemCode: string, settings: FrappeSettings): Promise<void> {
+  if (!itemCode || itemCode.trim() === '') {
+    throw new Error(`Cannot verify or create item: item_code is missing.`);
+  }
+
+  const encCode = encodeURIComponent(itemCode);
+  const checkUrl = `/api/proxy/api/resource/Item/${encCode}`;
+
+  const checkRes = await fetch(checkUrl, {
+    method: 'GET',
+    headers: getHeaders(settings),
+  });
+
+  if (checkRes.ok) {
+    // Item exists, carry on
+    return;
+  }
+
+  // Create item dynamically if missing
+  console.log(`[Sync] Item ${itemCode} missing in ERPNext. Auto-creating stock item...`);
+  const createUrl = `/api/proxy/api/resource/Item`;
+  
+  let itemName = itemCode;
+  let itemGroup = 'Products';
+  
+  if (typeof window !== 'undefined') {
+    const cached = localStorage.getItem('cached_items');
+    if (cached) {
+      try {
+        const itemsList = JSON.parse(cached);
+        if (Array.isArray(itemsList)) {
+          const matched = itemsList.find(i => i.item_code === itemCode);
+          if (matched) {
+            itemName = matched.item_name || itemCode;
+            itemGroup = matched.item_group || 'Products';
+          }
+        }
+      } catch {
+        // ignore
+      }
+    }
+  }
+
+  const body = {
+    item_code: itemCode,
+    item_name: itemName,
+    item_group: itemGroup,
+    stock_uom: 'Kg',
+    is_stock_item: 1,
+    valuation_rate: 20.0,
+  };
+
+  const createRes = await fetch(createUrl, {
+    method: 'POST',
+    headers: getHeaders(settings),
+    body: JSON.stringify(body),
+  });
+
+  if (!createRes.ok) {
+    const errText = await createRes.text();
+    throw new Error(`Failed to auto-create stock Item '${itemCode}': ${errText}`);
+  }
+}
+
 // Sync single Invoice to remote
 export async function syncInvoiceToRemote(invoice: SalesInvoice, settings: FrappeSettings): Promise<string> {
   if (!invoice.customer_name || invoice.customer_name === 'undefined' || invoice.customer_name.trim() === '') {
@@ -903,6 +968,11 @@ export async function syncInvoiceToRemote(invoice: SalesInvoice, settings: Frapp
 
   // Ensure customer exists
   await verifyOrCreateParty(invoice.customer_name, 'Customer', settings);
+
+  // Ensure all items exist in ERPNext
+  for (const item of invoice.items) {
+    await verifyOrCreateItem(item.item_code, settings);
+  }
 
   const url = `/api/proxy/api/resource/Sales Invoice`;
   
@@ -1175,6 +1245,9 @@ export async function syncWarehouseToRemote(warehouse: Warehouse, settings: Frap
 }
 
 export async function syncStockEntryToRemote(entry: StockAdjustmentEntry, settings: FrappeSettings): Promise<string> {
+  // Ensure the stock item exists in ERPNext before posting entries referencing it
+  await verifyOrCreateItem(entry.item_code, settings);
+
   const url = `/api/proxy/api/resource/Stock Entry`;
   
   const isReceipt = entry.purpose === 'Material Receipt';
