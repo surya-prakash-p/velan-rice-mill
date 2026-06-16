@@ -1,0 +1,29 @@
+# Node.js dependencies
+frontend/node_modules/
+
+# Next.js build outputs
+frontend/.next/
+frontend/out/
+frontend/build/
+
+# Vercel deployment metadata
+frontend/.vercel/
+frontend/.env.local
+frontend/.env.production.local
+frontend/.env.development.local
+
+# Python compiled files & virtual environments
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+ENV/
+
+# System / IDE files
+.vscode/
+.idea/
+.DS_Store
+*.log
+*.tmp

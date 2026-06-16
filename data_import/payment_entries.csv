@@ -1,0 +1,5 @@
+posting_date,payment_type,party_name,amount,reference_no,custom_category
+2026-06-10,Receive,Sri Balaji Traders,288881.25,rtgs-778392,Rice Sales
+2026-06-11,Pay,Labor Wages,15000.00,cash-labor,Labor Wages
+2026-06-13,Receive,Annamalai Corporation,60000.00,rtgs-987261,Rice Sales
+2026-06-14,Pay,TNEB Power,8500.00,online-electricity,Electricity

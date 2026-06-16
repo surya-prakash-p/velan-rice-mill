@@ -1,0 +1,260 @@
+<div class="print-format-container">
+    <style>
+        .print-format-container {
+            font-family: 'Inter', 'Outfit', sans-serif;
+            color: #1a1a1a;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+        .header-table {
+            width: 100%;
+            border-bottom: 2px solid #333;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        .company-title {
+            font-size: 24px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #0f172a;
+        }
+        .company-details {
+            font-size: 11px;
+            color: #475569;
+            line-height: 1.5;
+        }
+        .invoice-title-box {
+            text-align: right;
+        }
+        .invoice-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 5px;
+        }
+        .info-table {
+            width: 100%;
+            margin-bottom: 25px;
+            border-collapse: collapse;
+        }
+        .info-table td {
+            vertical-align: top;
+            padding: 6px;
+        }
+        .info-label {
+            font-weight: 600;
+            color: #475569;
+            width: 30%;
+        }
+        .info-value {
+            color: #0f172a;
+        }
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        .items-table th {
+            background-color: #f1f5f9;
+            color: #334155;
+            font-weight: 600;
+            text-align: left;
+            border-bottom: 2px solid #cbd5e1;
+            padding: 10px;
+        }
+        .items-table td {
+            border-bottom: 1px solid #e2e8f0;
+            padding: 10px;
+            color: #0f172a;
+        }
+        .items-table tr:last-child td {
+            border-bottom: 2px solid #cbd5e1;
+        }
+        .text-right {
+            text-align: right;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .total-section {
+            width: 100%;
+            margin-top: 15px;
+        }
+        .total-table {
+            width: 40%;
+            float: right;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+        .total-table td {
+            padding: 6px 10px;
+        }
+        .total-table tr.grand-total td {
+            font-weight: 700;
+            font-size: 15px;
+            border-top: 1px solid #94a3b8;
+            border-bottom: 2px double #94a3b8;
+            color: #0f172a;
+        }
+        .words-section {
+            width: 55%;
+            float: left;
+            padding: 10px;
+            background-color: #f8fafc;
+            border-radius: 4px;
+            font-style: italic;
+            color: #475569;
+        }
+        .clear {
+            clear: both;
+        }
+        .terms-signatures {
+            margin-top: 40px;
+            width: 100%;
+        }
+        .signature-box {
+            width: 200px;
+            border-top: 1px solid #94a3b8;
+            text-align: center;
+            padding-top: 5px;
+            float: right;
+            font-size: 11px;
+            color: #64748b;
+        }
+    </style>
+
+    <!-- Header Section -->
+    <table class="header-table">
+        <tr>
+            <td>
+                <div class="company-title">{{ doc.company }}</div>
+                <div class="company-details">
+                    P.K. Palayam, India<br>
+                    Phone: +91 98765 43210 | Email: contact@pkprmill.com
+                </div>
+            </td>
+            <td class="invoice-title-box">
+                <div class="invoice-title">SALES INVOICE</div>
+                <div><strong>Invoice No:</strong> {{ doc.name }}</div>
+                <div><strong>Date:</strong> {{ doc.get_formatted("posting_date") }}</div>
+            </td>
+        </tr>
+    </table>
+
+    <!-- Billing Info -->
+    <table class="info-table">
+        <tr>
+            <td style="width: 50%; border-right: 1px solid #e2e8f0;">
+                <div style="font-weight: 700; font-size: 11px; color: #64748b; text-transform: uppercase; margin-bottom: 5px;">Billed To</div>
+                <strong>{{ doc.customer_name }}</strong><br>
+                {% if doc.address_display %}
+                    {{ doc.address_display }}
+                {% else %}
+                    No Address Provided
+                {% endif %}
+            </td>
+            <td style="width: 50%; padding-left: 20px;">
+                <div style="font-weight: 700; font-size: 11px; color: #64748b; text-transform: uppercase; margin-bottom: 5px;">Payment Details</div>
+                <table>
+                    <tr>
+                        <td class="info-label">Due Date:</td>
+                        <td class="info-value">{{ doc.get_formatted("due_date") }}</td>
+                    </tr>
+                    <tr>
+                        <td class="info-label">Currency:</td>
+                        <td class="info-value">{{ doc.currency }}</td>
+                    </tr>
+                    {% if doc.project %}
+                    <tr>
+                        <td class="info-label">Project:</td>
+                        <td class="info-value">{{ doc.project }}</td>
+                    </tr>
+                    {% endif %}
+                </table>
+            </td>
+        </tr>
+    </table>
+
+    <!-- Items Table -->
+    <table class="items-table">
+        <thead>
+            <tr>
+                <th style="width: 5%;" class="text-center">#</th>
+                <th style="width: 35%;">Item & Description</th>
+                <th style="width: 10%;" class="text-right">Bags</th>
+                <th style="width: 15%;" class="text-right">Bag Wt (Kg)</th>
+                <th style="width: 15%;" class="text-right">Total Qty (Kg)</th>
+                <th style="width: 10%;" class="text-right">Rate</th>
+                <th style="width: 10%;" class="text-right">Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in doc.items %}
+            <tr>
+                <td class="text-center">{{ row.idx }}</td>
+                <td>
+                    <strong>{{ row.item_code }}</strong>
+                    {% if row.description %}
+                        <div style="font-size: 11px; color: #475569; margin-top: 2px;">{{ row.description }}</div>
+                    {% endif %}
+                </td>
+                <td class="text-right">{{ row.custom_bags or 0 }}</td>
+                <td class="text-right">{{ row.get_formatted("custom_bag_weight") or "0.00" }}</td>
+                <td class="text-right">{{ row.get_formatted("qty") }}</td>
+                <td class="text-right">{{ row.get_formatted("rate") }}</td>
+                <td class="text-right">{{ row.get_formatted("amount") }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Totals Section -->
+    <div class="total-section">
+        <div class="words-section">
+            <strong>Amount in words:</strong><br>
+            {{ doc.in_words }}
+        </div>
+        
+        <table class="total-table">
+            <tr>
+                <td>Subtotal:</td>
+                <td class="text-right">{{ doc.get_formatted("total") }}</td>
+            </tr>
+            {% if doc.total_taxes_and_charges %}
+            <tr>
+                <td>Taxes & Charges:</td>
+                <td class="text-right">{{ doc.get_formatted("total_taxes_and_charges") }}</td>
+            </tr>
+            {% endif %}
+            {% if doc.discount_amount %}
+            <tr>
+                <td>Discount:</td>
+                <td class="text-right">-{{ doc.get_formatted("discount_amount") }}</td>
+            </tr>
+            {% endif %}
+            <tr class="grand-total">
+                <td>Grand Total:</td>
+                <td class="text-right">{{ doc.get_formatted("grand_total") }}</td>
+            </tr>
+        </table>
+        <div class="clear"></div>
+    </div>
+
+    <!-- Terms & Signature -->
+    <div class="terms-signatures">
+        <div style="float: left; width: 50%; font-size: 10px; color: #64748b;">
+            <strong>Terms & Conditions:</strong><br>
+            1. Goods once sold will not be taken back.<br>
+            2. Subject to local jurisdiction.
+        </div>
+        <div class="signature-box">
+            For {{ doc.company }}<br><br><br>
+            Authorised Signatory
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
