@@ -627,7 +627,7 @@ export function loadDemoData(): void {
     saveSettings(updated);
   } else {
     saveSettings({
-      baseUrl: 'http://127.0.0.1:8000',
+      baseUrl: 'https://slimy-apples-agree.loca.lt',
       apiKey: 'demo',
       apiSecret: 'demo',
       companyName: 'P.K. Palayam Rice Mill',
