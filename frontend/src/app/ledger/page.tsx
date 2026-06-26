@@ -44,14 +44,29 @@ export default function LedgerPage() {
 
   // Expense Form states
   const [expenseDate, setExpenseDate] = useState(new Date().toISOString().split('T')[0]);
-  const [expenseCategory, setExpenseCategory] = useState('Labor Wages');
+  const [expenseCategory, setExpenseCategory] = useState('🌾 Paddy Purchase (நெல் வாங்குதல்)');
+  const [customCategory, setCustomCategory] = useState('');
   const [expenseParty, setExpenseParty] = useState('');
   const [expensePaymentMode, setExpensePaymentMode] = useState<'Cash' | 'GPay / UPI' | 'Bank Transfer / RTGS' | 'Cheque'>('Cash');
   const [expenseAmount, setExpenseAmount] = useState<number>(0);
   const [expenseRef, setExpenseRef] = useState('');
 
   // Categories list
-  const categoriesList = ['Rice Sales', 'Labor Wages', 'Husk Sales', 'Electricity', 'Fuel', 'Other'];
+  const categoriesList = [
+    'Rice Sales',
+    'Husk Sales',
+    '🌾 Paddy Purchase (நெல் வாங்குதல்)',
+    '📦 Gunny Bags (சாக்குப் பை)',
+    '🧵 Bag Stitching Thread (நூல் கண்டு)',
+    '🪵 Matta (மட்டை)',
+    '🔧 Machinery Spare Parts (இயந்திர உதிரி பாகங்கள்)',
+    '⛽ Diesel Fuel (டீசல்)',
+    '🛢️ Grease & Lubricants (கிரீஸ்)',
+    '🔥 Firewood Fuel (விறகு கட்டை)',
+    '🌰 Cashew Shell Fuel (முந்திரி தோப்பு)',
+    '🧂 Salt & Processing Chemicals (உப்பு)',
+    'Other'
+  ];
 
   const loadMasterData = async () => {
     const custs = await fetchCustomers(null);
@@ -76,6 +91,16 @@ export default function LedgerPage() {
       refStr = `${expensePaymentMode.toLowerCase()}-payment`;
     }
 
+    let categoryToRecord = expenseCategory;
+    if (expenseCategory === 'Other') {
+      const trimmedCustom = customCategory.trim();
+      if (!trimmedCustom) {
+        alert('Please specify the custom category name.');
+        return;
+      }
+      categoryToRecord = trimmedCustom;
+    }
+
     const localPmtId = `L-PMT-${Date.now()}`;
     const newExpensePayment: PaymentEntry = {
       id: localPmtId,
@@ -84,16 +109,17 @@ export default function LedgerPage() {
       party_name: expenseParty.trim(),
       amount: expenseAmount,
       reference_no: refStr,
-      custom_category: expenseCategory,
+      custom_category: categoryToRecord,
       sync_status: 'pending',
     };
 
     addPayment(newExpensePayment);
-    addLogMessage(`Recorded Expense of ₹${formatIndianNumber(expenseAmount)} for ${expenseCategory} to ${expenseParty}.`);
+    addLogMessage(`Recorded Expense of ₹${formatIndianNumber(expenseAmount)} for ${categoryToRecord} to ${expenseParty}.`);
 
     // Reset states and close modal
     setExpenseDate(new Date().toISOString().split('T')[0]);
-    setExpenseCategory('Labor Wages');
+    setExpenseCategory('🌾 Paddy Purchase (நெல் வாங்குதல்)');
+    setCustomCategory('');
     setExpenseParty('');
     setExpensePaymentMode('Cash');
     setExpenseAmount(0);
@@ -494,13 +520,34 @@ export default function LedgerPage() {
                     onChange={(e) => setExpenseCategory(e.target.value)}
                     required
                   >
-                    <option value="Labor Wages">Labor Wages</option>
-                    <option value="Electricity">Electricity</option>
-                    <option value="Fuel">Fuel</option>
+                    <option value="🌾 Paddy Purchase (நெல் வாங்குதல்)">🌾 Paddy Purchase (நெல் வாங்குதல்)</option>
+                    <option value="📦 Gunny Bags (சாக்குப் பை)">📦 Gunny Bags (சாக்குப் பை)</option>
+                    <option value="🧵 Bag Stitching Thread (நூல் கண்டு)">🧵 Bag Stitching Thread (நூல் கண்டு)</option>
+                    <option value="🪵 Matta (மட்டை)">🪵 Matta (மட்டை)</option>
+                    <option value="🔧 Machinery Spare Parts (இயந்திர உதிரி பாகங்கள்)">🔧 Machinery Spare Parts (இயந்திர உதிரி பாகங்கள்)</option>
+                    <option value="⛽ Diesel Fuel (டீசல்)">⛽ Diesel Fuel (டீசல்)</option>
+                    <option value="🛢️ Grease & Lubricants (கிரீஸ்)">🛢️ Grease & Lubricants (கிரீஸ்)</option>
+                    <option value="🔥 Firewood Fuel (விறகு கட்டை)">🔥 Firewood Fuel (விறகு கட்டை)</option>
+                    <option value="🌰 Cashew Shell Fuel (முந்திரி தோப்பு)">🌰 Cashew Shell Fuel (முந்திரி தோப்பு)</option>
+                    <option value="🧂 Salt & Processing Chemicals (உப்பு)">🧂 Salt & Processing Chemicals (உப்பு)</option>
                     <option value="Other">Other</option>
                   </select>
                 </div>
               </div>
+
+              {expenseCategory === 'Other' && (
+                <div className="form-group" style={{ marginBottom: '16px' }}>
+                  <label className="form-label">Custom Category Name</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="e.g. Tea & Snacks, Office Stationery"
+                    value={customCategory}
+                    onChange={(e) => setCustomCategory(e.target.value)}
+                    required
+                  />
+                </div>
+              )}
 
               <div className="form-group">
                 <label className="form-label">Party / Paid To</label>

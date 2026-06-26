@@ -667,7 +667,7 @@ export default function NewInvoicePage() {
                 <input
                   type="text"
                   className="form-control"
-                  placeholder="e.g. M.64 New"
+                  placeholder="e.g. IR 64"
                   value={newItemCode}
                   onChange={(e) => setNewItemCode(e.target.value)}
                   required
@@ -678,7 +678,7 @@ export default function NewInvoicePage() {
                 <input
                   type="text"
                   className="form-control"
-                  placeholder="e.g. M.64 New Raw Rice Premium"
+                  placeholder="e.g. IR 64 Rice"
                   value={newItemName}
                   onChange={(e) => setNewItemName(e.target.value)}
                   required

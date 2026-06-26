@@ -1,5 +1,5 @@
 posting_date,customer_name,item_code,custom_bags,custom_bag_weight,rate,discount_amount,tax_rate,is_settled
-2026-06-10,Sri Balaji Traders,M.64 New,150,75,24.50,500,5,1
-2026-06-12,Murugan Agencies,IR20 Premium,200,75,26.00,1000,5,0
-2026-06-13,Annamalai Corporation,Broken Rice,80,50,15.00,0,0,1
-2026-06-14,Venkateshwara Stores,Ponni Raw,120,75,32.00,1500,5,0
+2026-06-10,Sri Balaji Traders,IR 64,150,75,25.00,500,5,1
+2026-06-12,Murugan Agencies,IR 64,200,75,25.00,1000,5,0
+2026-06-13,Annamalai Corporation,IR 64,80,50,25.00,0,0,1
+2026-06-14,Venkateshwara Stores,IR 64,120,75,25.00,1500,5,0

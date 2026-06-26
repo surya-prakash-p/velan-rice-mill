@@ -68,7 +68,20 @@ def run():
             frappe.db.commit()
             print(f"SUCCESS: Created custom field '{fieldname}' in '{dt}'")
         else:
-            print(f"INFO: Custom field '{fieldname}' already exists in '{dt}'")
+            custom_field = frappe.get_doc("Custom Field", custom_field_name)
+            updated = False
+            if custom_field.fieldtype != fieldtype:
+                custom_field.fieldtype = fieldtype
+                updated = True
+            if custom_field.options != options:
+                custom_field.options = options
+                updated = True
+            if updated:
+                custom_field.save(ignore_permissions=True)
+                frappe.db.commit()
+                print(f"SUCCESS: Updated custom field '{fieldname}' in '{dt}' to {fieldtype}")
+            else:
+                print(f"INFO: Custom field '{fieldname}' already exists in '{dt}' with matching config")
 
     # 2. Create Custom Fields
     # Sales Invoice Item Custom Fields
@@ -88,14 +101,12 @@ def run():
     )
 
     # Payment Entry Custom Fields
-    payment_options = "\nRice Sales\nLabor Wages\nHusk Sales\nElectricity\nFuel\nOther"
     create_custom_field(
         dt="Payment Entry",
         fieldname="custom_category",
         label="Custom Category",
-        fieldtype="Select",
-        insert_after="reference_no",
-        options=payment_options
+        fieldtype="Data",
+        insert_after="reference_no"
     )
 
     # 3. Create/Update Client Script

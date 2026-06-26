@@ -291,7 +291,7 @@ export async function fetchItems(settings: FrappeSettings | null): Promise<Item[
     const name = (item.item_name || '').toLowerCase();
     const code = (item.item_code || '').toLowerCase();
     const group = (item.item_group || '').toLowerCase();
-    const keywords = ['rice', 'husk', 'bran', 'paddy', 'ponni', 'm.64', 'ir20', 'kuruva', 'raw', 'broken', 'grain', 'flour'];
+    const keywords = ['rice', 'husk', 'bran', 'paddy', 'ponni', 'm.64', 'ir20', 'ir 64', 'ir64', 'kuruva', 'raw', 'broken', 'grain', 'flour'];
     return keywords.some(kw => name.includes(kw) || code.includes(kw) || group.includes(kw));
   };
 
@@ -658,11 +658,7 @@ export function loadDemoData(): void {
 
   // Setup sample items
   const sampleItems: Item[] = [
-    { item_code: 'M.64 New', item_name: 'M.64 New Rice (Fine)', item_group: 'Products', stock_uom: 'Kg', valuation_rate: 24.5, actual_qty: 4500 },
-    { item_code: 'IR20 Premium', item_name: 'IR20 Premium Rice', item_group: 'Products', stock_uom: 'Kg', valuation_rate: 26.0, actual_qty: 6000 },
-    { item_code: 'Ponni Raw', item_name: 'Ponni Raw Rice (Aged)', item_group: 'Products', stock_uom: 'Kg', valuation_rate: 32.0, actual_qty: 3200 },
-    { item_code: 'Husk', item_name: 'Paddy Husk (Byproduct)', item_group: 'Byproducts', stock_uom: 'Kg', valuation_rate: 4.5, actual_qty: 12000 },
-    { item_code: 'Broken Rice', item_name: 'Broken Rice (Kuruva)', item_group: 'Byproducts', stock_uom: 'Kg', valuation_rate: 15.0, actual_qty: 8500 },
+    { item_code: 'IR 64', item_name: 'IR 64 Rice', item_group: 'Products', stock_uom: 'Kg', valuation_rate: 25.0, actual_qty: 15500 },
   ];
   localStorage.setItem(ITEMS_CACHE_KEY, JSON.stringify(sampleItems));
 
@@ -677,13 +673,8 @@ export function loadDemoData(): void {
 
   // Setup sample bins
   const sampleBins = [
-    { item_code: 'M.64 New', warehouse: 'Velan Warehouse - PPRM', actual_qty: 4500 },
-    { item_code: 'M.64 New', warehouse: 'Finished Goods - PPRM', actual_qty: 1200 },
-    { item_code: 'IR20 Premium', warehouse: 'Velan Warehouse - PPRM', actual_qty: 6000 },
-    { item_code: 'IR20 Premium', warehouse: 'Finished Goods - PPRM', actual_qty: 2500 },
-    { item_code: 'Ponni Raw', warehouse: 'Velan Warehouse - PPRM', actual_qty: 3200 },
-    { item_code: 'Husk', warehouse: 'Velan Warehouse - PPRM', actual_qty: 12000 },
-    { item_code: 'Broken Rice', warehouse: 'Velan Warehouse - PPRM', actual_qty: 8500 },
+    { item_code: 'IR 64', warehouse: 'Velan Warehouse - PPRM', actual_qty: 12000 },
+    { item_code: 'IR 64', warehouse: 'Finished Goods - PPRM', actual_qty: 3500 },
   ];
   localStorage.setItem(BINS_CACHE_KEY, JSON.stringify(sampleBins));
 
@@ -693,13 +684,13 @@ export function loadDemoData(): void {
       id: 'L-INV-1001',
       posting_date: '2026-06-10',
       customer_name: 'Sri Balaji Traders',
-      items: [{ item_code: 'M.64 New', custom_bags: 150, custom_bag_weight: 75, qty: 11250, rate: 24.50, amount: 275625, description: 'M.64 New = 11,250 x 24.50' }],
+      items: [{ item_code: 'IR 64', custom_bags: 150, custom_bag_weight: 75, qty: 11250, rate: 25.00, amount: 281250, description: 'IR 64 = 11,250 x 25.00' }],
       discount_amount: 500,
       tax_rate: 5,
-      subtotal: 275125,
-      taxes_and_charges: 13756.25,
-      grand_total: 288881.25,
-      in_words: 'Rupees Two Lakh Eighty Eight Thousand Eight Hundred and Eighty One and Twenty Five Paise Only',
+      subtotal: 280750,
+      taxes_and_charges: 14037.5,
+      grand_total: 294787.5,
+      in_words: 'Rupees Two Lakh Ninety Four Thousand Seven Hundred and Eighty Seven and Fifty Paise Only',
       is_settled: true,
       sync_status: 'pending',
     },
@@ -707,13 +698,13 @@ export function loadDemoData(): void {
       id: 'L-INV-1002',
       posting_date: '2026-06-12',
       customer_name: 'Murugan Agencies',
-      items: [{ item_code: 'IR20 Premium', custom_bags: 200, custom_bag_weight: 75, qty: 15000, rate: 26.00, amount: 390000, description: 'IR20 Premium = 15,000 x 26.00' }],
+      items: [{ item_code: 'IR 64', custom_bags: 200, custom_bag_weight: 75, qty: 15000, rate: 25.00, amount: 375000, description: 'IR 64 = 15,000 x 25.00' }],
       discount_amount: 1000,
       tax_rate: 5,
-      subtotal: 389000,
-      taxes_and_charges: 19450,
-      grand_total: 408450,
-      in_words: 'Rupees Four Lakh Eight Thousand Four Hundred and Fifty Only',
+      subtotal: 374000,
+      taxes_and_charges: 18700,
+      grand_total: 392700,
+      in_words: 'Rupees Three Lakh Ninety Two Thousand Seven Hundred Only',
       is_settled: false,
       sync_status: 'pending',
     },
@@ -721,13 +712,13 @@ export function loadDemoData(): void {
       id: 'L-INV-1003',
       posting_date: '2026-06-13',
       customer_name: 'Annamalai Corporation',
-      items: [{ item_code: 'Broken Rice', custom_bags: 80, custom_bag_weight: 50, qty: 4000, rate: 15.00, amount: 60000, description: 'Broken Rice = 4,000 x 15.00' }],
+      items: [{ item_code: 'IR 64', custom_bags: 80, custom_bag_weight: 50, qty: 4000, rate: 25.00, amount: 100000, description: 'IR 64 = 4,000 x 25.00' }],
       discount_amount: 0,
       tax_rate: 0,
-      subtotal: 60000,
+      subtotal: 100000,
       taxes_and_charges: 0,
-      grand_total: 60000,
-      in_words: 'Rupees Sixty Thousand Only',
+      grand_total: 100000,
+      in_words: 'Rupees One Lakh Only',
       is_settled: true,
       sync_status: 'pending',
     },
@@ -735,13 +726,13 @@ export function loadDemoData(): void {
       id: 'L-INV-1004',
       posting_date: '2026-06-14',
       customer_name: 'Venkateshwara Stores',
-      items: [{ item_code: 'Ponni Raw', custom_bags: 120, custom_bag_weight: 75, qty: 9000, rate: 32.00, amount: 288000, description: 'Ponni Raw = 9,000 x 32.00' }],
+      items: [{ item_code: 'IR 64', custom_bags: 120, custom_bag_weight: 75, qty: 9000, rate: 25.00, amount: 225000, description: 'IR 64 = 9,000 x 25.00' }],
       discount_amount: 1500,
       tax_rate: 5,
-      subtotal: 286500,
-      taxes_and_charges: 14325,
-      grand_total: 300825,
-      in_words: 'Rupees Three Lakh Eighty Hundred and Twenty Five Only',
+      subtotal: 223500,
+      taxes_and_charges: 11175,
+      grand_total: 234675,
+      in_words: 'Rupees Two Lakh Thirty Four Thousand Six Hundred and Seventy Five Only',
       is_settled: false,
       sync_status: 'pending',
     },
@@ -755,7 +746,7 @@ export function loadDemoData(): void {
       posting_date: '2026-06-10',
       payment_type: 'Receive',
       party_name: 'Sri Balaji Traders',
-      amount: 288881.25,
+      amount: 294787.50,
       reference_no: 'rtgs-778392',
       custom_category: 'Rice Sales',
       linked_invoice_id: 'L-INV-1001',
@@ -765,10 +756,10 @@ export function loadDemoData(): void {
       id: 'L-PMT-2002',
       posting_date: '2026-06-11',
       payment_type: 'Pay',
-      party_name: 'Labor Wages',
+      party_name: 'Paddy Supplier',
       amount: 15000.00,
-      reference_no: 'cash-labor',
-      custom_category: 'Labor Wages',
+      reference_no: 'cash-paddy',
+      custom_category: '🌾 Paddy Purchase (நெல் வாங்குதல்)',
       sync_status: 'pending',
     },
     {
@@ -776,7 +767,7 @@ export function loadDemoData(): void {
       posting_date: '2026-06-13',
       payment_type: 'Receive',
       party_name: 'Annamalai Corporation',
-      amount: 60000.00,
+      amount: 100000.00,
       reference_no: 'rtgs-987261',
       custom_category: 'Rice Sales',
       linked_invoice_id: 'L-INV-1003',
@@ -786,10 +777,10 @@ export function loadDemoData(): void {
       id: 'L-PMT-2004',
       posting_date: '2026-06-14',
       payment_type: 'Pay',
-      party_name: 'TNEB Power',
+      party_name: 'Fuel Station',
       amount: 8500.00,
-      reference_no: 'online-electricity',
-      custom_category: 'Electricity',
+      reference_no: 'diesel-generator',
+      custom_category: '⛽ Diesel Fuel (டீசல்)',
       sync_status: 'pending',
     },
   ];
